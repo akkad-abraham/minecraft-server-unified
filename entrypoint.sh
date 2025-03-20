@@ -53,9 +53,14 @@ if [ ! -f "start.sh" ]; then
         wget $FORGE_URL -O forge-installer.jar
         java -jar forge-installer.jar --installServer
         rm forge-installer.jar
-        # Forge jar name follows the pattern forge-<mc_version>-<forge_version>.jar
-        # TODO fix forge-*.jar location
-        echo "java -Xmx4G -Xms4G -jar forge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
+        # Use the default run.sh as a template for start.sh for newer versions of Forge
+        # For older versions Forge jar name follows the pattern forge-<mc_version>-<forge_version>.jar
+        if [ -f "user_jvm_args.txt" ]; then
+            echo "-Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS" > user_jvm_args.txt
+            echo "./run.sh nogui" > start.sh
+        else
+            echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS -jar forge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
+        fi
         chmod +x start.sh
 
     elif [ "$MOD_LOADER" = "fabric" ]; then
