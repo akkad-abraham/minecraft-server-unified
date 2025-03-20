@@ -12,7 +12,7 @@ To use this Docker image, you need to set a few environment variables to configu
 
 Here is a list of environment variables you can set, along with explanations of what they do:
 
-### 1. `JAVA_VERSION`
+#### 1. `JAVA_VERSION`
 - **Description**: Specifies the version of Java to use for running the Minecraft server.
 - **Options**: `17` or `21`
 - **Default**: None (must be set).
@@ -22,27 +22,31 @@ Here is a list of environment variables you can set, along with explanations of 
   docker run -e JAVA_VERSION=17 ...
 ```
 
-### 2. MC_VERSION
+#### 2. `MC_VERSION`
 - **Description**: Specifies the version of Minecraft you want to run on the server.
 - **Options**: Any valid Minecraft version (e.g., `1.20.1`, `1.19.4`).
-- **Default**: None (must be set).
+- **Default**: latest-release
 - **How to Set**: Add `-e MC_VERSION=1.20.1` when running the Docker container.
-Example:
-### 3. MOD_LOADER
+- **Example**:  
+```sh
+  docker run -e MC_VERSION=1.20.1 ...
+```
+
+#### 3. `MOD_LOADER`
 - **Description**: Specifies the mod loader to use for the server.
 - **Options**: :
   - `vanilla`: Runs a standard Minecraft server without mods.  
   - `forge`: Runs a Forge modded server.  
   - `fabric`: Runs a Fabric modded server.  
   - `neoforge`: Runs a NeoForge modded server.  
-- **Default**: None (must be set).
+- **Default**: `vanilla`
 - **How to Set**: Add `-e MOD_LOADER=forge` (or another option) when running the Docker container.
 - **Example**:  
 ```sh
 docker run -e MOD_LOADER=forge ...
 ```
 
-### 4. MOD_LOADER_VERSION
+#### 4. `MOD_LOADER_VERSION`
 - **Description**: Specifies the version of the mod loader to use. This is required if you are using `forge`, `fabric`, or `neoforge` as the mod loader.
 - **Options**: : Any valid version of the selected mod loader (e.g., `45.0.66` for Forge, `0.14.21` for Fabric).
 - **Default**: None (must be set if using a mod loader).
@@ -50,6 +54,15 @@ docker run -e MOD_LOADER=forge ...
 - **Example**:  
 ```sh
 docker run -e MOD_LOADER_VERSION=45.0.66 ...
+```
+
+#### 5. `JAVA_XMX` and `JAVA_XMS`
+- **Description**: Specifies the maximum (`JAVA_XMX`) and initial (`JAVA_XMS`) memory allocation for the Java Virtual Machine (JVM). These variables control how much memory the Minecraft server can use.
+- **Default**: `JAVA_XMX=4G`, `JAVA_XMS=4G`
+- **How to Set**: Add `-e JAVA_XMX=2G -e JAVA_XMS=2G` (or other values) when running the Docker container.
+- **Example**:  
+```sh
+docker run -e JAVA_XMX=2G -e JAVA_XMS=2G ...
 ```
 
 ### Example Usage
@@ -61,6 +74,8 @@ docker run -d \
   -e MC_VERSION=1.20.1 \
   -e MOD_LOADER=forge \
   -e MOD_LOADER_VERSION=45.0.66 \
+  -e JAVA_XMX=2G \
+  -e JAVA_XMS=2G \
   -v /path/to/server_data:/server \
   -p 25565:25565 \
   minecraft-modpack-server
