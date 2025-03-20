@@ -20,6 +20,19 @@ case $JAVA_VERSION in
         ;;
 esac
 
+# Set default values for Java memory options if not provided
+JAVA_XMX=${JAVA_XMX:-4G}
+JAVA_XMS=${JAVA_XMS:-4G}
+
+# Allow users to provide additional Java arguments
+JAVA_ARGS=${JAVA_ARGS:-}
+
+# Set default value for mod loader to vanilla
+MOD_LOADER=${MOD_LOADER:-vanilla}
+
+# Set default value for minecraft vanilla version to latest release
+MC_VERSION=${MC_VERSION:-$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json | jq -r '.latest.release')}
+
 # Check if the server is already installed (using start.sh as an indicator)
 if [ ! -f "start.sh" ]; then
     echo "Installing Minecraft server..."
@@ -31,7 +44,7 @@ if [ ! -f "start.sh" ]; then
         SERVER_URL=$(curl -s $VERSION_JSON_URL | jq -r ".downloads.server.url")
         wget $SERVER_URL -O server.jar
         # TODO Add support for custom launch arguments
-        echo "java -Xmx4G -Xms4G -jar server.jar nogui" > start.sh
+        echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar server.jar nogui" > start.sh
         chmod +x start.sh
 
     elif [ "$MOD_LOADER" = "forge" ]; then
@@ -52,7 +65,7 @@ if [ ! -f "start.sh" ]; then
         java -jar fabric-installer.jar server -mcversion $MC_VERSION -loader $MOD_LOADER_VERSION
         rm fabric-installer.jar
         # Fabric generates fabric-server-launch.jar
-        echo "java -Xmx4G -Xms4G -jar fabric-server-launch.jar nogui" > start.sh
+        echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar fabric-server-launch.jar nogui" > start.sh
         chmod +x start.sh
 
     # Add NeoForge support (similar to Forge, adjust URL as needed)
@@ -61,7 +74,7 @@ if [ ! -f "start.sh" ]; then
         wget $NEFORGE_URL -O neoforge-installer.jar
         java -jar neoforge-installer.jar --installServer
         rm neoforge-installer.jar
-        echo "java -Xmx4G -Xms4G -jar neoforge-$MOD_LOADER_VERSION.jar nogui" > start.sh
+        echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar neoforge-$MOD_LOADER_VERSION.jar nogui" > start.sh
         chmod +x start.sh
 
     else
