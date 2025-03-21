@@ -9,10 +9,10 @@ fi
 # Set the Java version based on JAVA_VERSION environment variable
 case $JAVA_VERSION in
     17)
-        update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+        JAVA_BIN="/usr/lib/jvm/java-17-openjdk-amd64/bin/java"
         ;;
     21)
-        update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+        JAVA_BIN="/usr/lib/jvm/java-21-openjdk-amd64/bin/java"
         ;;
     *)
         echo "Unsupported Java version: $JAVA_VERSION"
@@ -44,7 +44,7 @@ if [ ! -f "start.sh" ]; then
         SERVER_URL=$(curl -s $VERSION_JSON_URL | jq -r ".downloads.server.url")
         wget $SERVER_URL -O server.jar
         # TODO Add support for custom launch arguments
-        echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar server.jar nogui" > start.sh
+        echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar server.jar nogui" > start.sh
         chmod +x start.sh
 
     elif [ "$MOD_LOADER" = "forge" ]; then
@@ -59,7 +59,7 @@ if [ ! -f "start.sh" ]; then
             echo "-Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS" > user_jvm_args.txt
             echo "./run.sh nogui" > start.sh
         else
-            echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS -jar forge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
+            echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS -jar forge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
         fi
         chmod +x start.sh
 
@@ -70,7 +70,7 @@ if [ ! -f "start.sh" ]; then
         java -jar fabric-installer.jar server -mcversion $MC_VERSION -loader $MOD_LOADER_VERSION
         rm fabric-installer.jar
         # Fabric generates fabric-server-launch.jar
-        echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar fabric-server-launch.jar nogui" > start.sh
+        echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar fabric-server-launch.jar nogui" > start.sh
         chmod +x start.sh
 
     # Add NeoForge support (similar to Forge, adjust URL as needed)
@@ -79,7 +79,8 @@ if [ ! -f "start.sh" ]; then
         wget $NEFORGE_URL -O neoforge-installer.jar
         java -jar neoforge-installer.jar --installServer
         rm neoforge-installer.jar
-        echo "java -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar neoforge-$MOD_LOADER_VERSION.jar nogui" > start.sh
+        # TODO: FIX Execution
+        echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar neoforge-$MOD_LOADER_VERSION.jar nogui" > start.sh
         chmod +x start.sh
 
     else

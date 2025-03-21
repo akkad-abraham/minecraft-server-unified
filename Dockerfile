@@ -9,10 +9,6 @@ RUN apt-get update && apt-get install -y \
     jq \
     && rm -rf /var/lib/apt/lists/*
 
-# Configure multiple Java versions with update-alternatives
-RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-17-openjdk-amd64/bin/java 1 \
-    && update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-21-openjdk-amd64/bin/java 2
-
 # Create a non-root user for running the server (UID 1000 is typical for first user on Ubuntu)
 RUN useradd -m -u 1000 minecraft
 
