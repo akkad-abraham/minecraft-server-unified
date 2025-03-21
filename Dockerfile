@@ -13,9 +13,6 @@ RUN apt-get update && apt-get install -y \
 # Create a non-root user for running the server (UID 1000 is typical for first user on Ubuntu)
 RUN useradd -m -u 1000 minecraft
 
-# Set the working directory inside the container
-WORKDIR /server
-
 # Copy the entrypoint script into the image
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -25,6 +22,8 @@ EXPOSE 25565
 
 # Switch to the minecraft user
 USER minecraft
+# Set the working directory inside the container
+WORKDIR /home/minecraft/server
 
 # Define the entrypoint to run the script
 ENTRYPOINT ["/entrypoint.sh"]
