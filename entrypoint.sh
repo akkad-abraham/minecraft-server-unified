@@ -21,8 +21,8 @@ case $JAVA_VERSION in
 esac
 
 # Set default values for Java memory options if not provided
-JAVA_XMX=${JAVA_XMX:-4G}
-JAVA_XMS=${JAVA_XMS:-4G}
+JAVA_XMX=${JAVA_XMX:-2G}
+JAVA_XMS=${JAVA_XMS:-2G}
 
 # Allow users to provide additional Java arguments
 JAVA_ARGS=${JAVA_ARGS:-}
