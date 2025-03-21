@@ -20,6 +20,9 @@ WORKDIR /server
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# The port that the Minecraft server listens on
+EXPOSE 25565
+
 # Switch to the minecraft user
 USER minecraft
 
