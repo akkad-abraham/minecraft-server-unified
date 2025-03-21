@@ -1,9 +1,15 @@
 #!/bin/bash
 
-# Ensure JAVA_VERSION is set
+# Set default value for minecraft vanilla version to latest release
+MC_VERSION=${MC_VERSION:-$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json | jq -r '.latest.release')}
+
+# Set Java version based on Minecraft version if not provided
 if [[ -z "$JAVA_VERSION" ]]; then
-    echo "Error: JAVA_VERSION environment variable is not set."
-    exit 1
+    if [ "$(echo -e "$MC_VERSION\n1.21" | sort -V | head -n1)" = "$MC_VERSION" ]; then
+        JAVA_VERSION=17
+    else
+        JAVA_VERSION=21
+    fi
 fi
 
 # Set the Java version based on JAVA_VERSION environment variable
@@ -29,9 +35,6 @@ JAVA_ARGS=${JAVA_ARGS:-}
 
 # Set default value for mod loader to vanilla
 MOD_LOADER=${MOD_LOADER:-vanilla}
-
-# Set default value for minecraft vanilla version to latest release
-MC_VERSION=${MC_VERSION:-$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json | jq -r '.latest.release')}
 
 # Check if the server is already installed (using start.sh as an indicator)
 if [ ! -f "start.sh" ]; then
