@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 
 # Install required packages: Java 17, Java 21, wget, and jq for parsing JSON (e.g., Minecraft version manifest)
 RUN apt-get update && apt-get install -y \
+    curl \
     openjdk-17-jdk \
     openjdk-21-jdk \
     wget \
