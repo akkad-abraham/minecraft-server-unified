@@ -39,7 +39,7 @@ JAVA_XMX=${JAVA_XMX:-2G}
 JAVA_XMS=${JAVA_XMS:-2G}
 
 # Allow users to provide additional Java arguments
-JAVA_ARGS=${JAVA_ARGS:-}
+JAVA_ARGS="-Xmx$JAVA_XMX -Xms$JAVA_XMS ${JAVA_ARGS:-}"
 
 # Set default value for mod loader to vanilla
 MOD_LOADER=${MOD_LOADER:-vanilla}
@@ -55,7 +55,7 @@ if [ ! -f "start.sh" ]; then
         SERVER_URL=$(curl -s $VERSION_JSON_URL | jq -r ".downloads.server.url")
         wget $SERVER_URL -O server.jar
         # TODO Add support for custom launch arguments
-        echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar server.jar nogui" > start.sh
+        echo "$JAVA_BIN $JAVA_ARGS -jar server.jar nogui" > start.sh
         chmod +x start.sh
 
     elif [ "$MOD_LOADER" = "forge" ]; then
@@ -67,10 +67,11 @@ if [ ! -f "start.sh" ]; then
         # Use the default run.sh as a template for start.sh for newer versions of Forge
         # For older versions Forge jar name follows the pattern forge-<mc_version>-<forge_version>.jar
         if [ -f "user_jvm_args.txt" ]; then
-            echo "-Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS" > user_jvm_args.txt
+            echo "$JAVA_ARGS" > user_jvm_args.txt
+            # TODO: FIX: run.sh uses the system java which can have other version than the one needed!
             echo "./run.sh nogui" > start.sh
         else
-            echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS $JAVA_ARGS -jar forge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
+            echo "$JAVA_BIN $JAVA_ARGS -jar forge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
         fi
         chmod +x start.sh
 
