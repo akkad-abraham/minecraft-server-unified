@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Make sure the EULA agreement is set to true
+if [ "$EULA" = "true" ]; then
+    echo "eula=true" > eula.txt
+else
+    echo "You must accept the Minecraft EULA by setting the EULA environment variable to true."
+    exit 1
+fi
+
 # Set default value for minecraft vanilla version to latest release
 MC_VERSION=${MC_VERSION:-$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json | jq -r '.latest.release')}
 
@@ -90,11 +98,6 @@ if [ ! -f "start.sh" ]; then
         echo "Unsupported mod loader: $MOD_LOADER"
         exit 1
     fi
-fi
-
-# Accept the Minecraft EULA
-if [ ! -f "eula.txt" ]; then
-    echo "eula=true" > eula.txt
 fi
 
 # Start the server inside a screen session
