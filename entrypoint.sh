@@ -84,13 +84,26 @@ if [ ! -f "start.sh" ]; then
 
     # Add NeoForge support (similar to Forge, adjust URL as needed)
     elif [ "$MOD_LOADER" = "neoforge" ]; then
-        NEFORGE_URL="https://maven.neoforged.net/releases/net/neoforged/neoforge/$MOD_LOADER_VERSION/neoforge-$MOD_LOADER_VERSION-installer.jar"
-        wget $NEFORGE_URL -O neoforge-installer.jar
-        java -jar neoforge-installer.jar --installServer
-        rm neoforge-installer.jar
-        # TODO: FIX Execution
-        echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar neoforge-$MOD_LOADER_VERSION.jar nogui" > start.sh
-        chmod +x start.sh
+        # For versions older than 1.20.2, use Forge installer
+        if [ "$(echo -e "$MC_VERSION\n1.20.2" | sort -V | head -n1)" = "$MC_VERSION" ]; then
+            echo "NeoForge requires Minecraft 1.20.2 or newer"
+            exit 1
+        else
+            NEOFORGE_URL="https://maven.neoforged.net/releases/net/neoforged/neoforge/$MOD_LOADER_VERSION/neoforge-$MOD_LOADER_VERSION-installer.jar"
+            wget $NEOFORGE_URL -O neoforge-installer.jar
+            java -jar neoforge-installer.jar --installServer
+            rm neoforge-installer.jar
+            # Use the default run.sh as a template for start.sh for newer versions of neoforge
+            if [ -f "user_jvm_args.txt" ]; then
+                echo "$JAVA_ARGS" > user_jvm_args.txt
+                # TODO: FIX: run.sh uses the system java which can have other version than the one needed!
+                echo "./run.sh nogui" > start.sh
+            else
+                # TODO confirm syntax for older versions
+                echo "$JAVA_BIN $JAVA_ARGS -jar neoforge-$MC_VERSION-$MOD_LOADER_VERSION.jar nogui" > start.sh
+            fi
+            chmod +x start.sh
+        fi
 
     else
         echo "Unsupported mod loader: $MOD_LOADER"
