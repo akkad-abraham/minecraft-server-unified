@@ -77,12 +77,9 @@ if [ ! -f "start.sh" ]; then
 
     elif [ "$MOD_LOADER" = "fabric" ]; then
         # Install Fabric server
-        FABRIC_INSTALLER_URL="https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.11.0/fabric-installer-0.11.0.jar"
+        FABRIC_INSTALLER_URL="https://meta.fabricmc.net/v2/versions/loader/$MC_VERSION/$MOD_LOADER_VERSION/$FABRIC_INSTALLER_VERSION/server/jar"
         wget $FABRIC_INSTALLER_URL -O fabric-installer.jar
-        java -jar fabric-installer.jar server -mcversion $MC_VERSION -loader $MOD_LOADER_VERSION
-        rm fabric-installer.jar
-        # Fabric generates fabric-server-launch.jar
-        echo "$JAVA_BIN -Xmx$JAVA_XMX -Xms$JAVA_XMS -jar fabric-server-launch.jar nogui" > start.sh
+        echo "$JAVA_BIN $JAVA_ARGS -jar fabric-installer.jar nogui" > start.sh
         chmod +x start.sh
 
     # Add NeoForge support (similar to Forge, adjust URL as needed)
