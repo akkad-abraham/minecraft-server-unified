@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     openjdk-21-jdk \
     wget \
     jq \
+    screen \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user for running the server (UID 1000 is typical for first user on Ubuntu)

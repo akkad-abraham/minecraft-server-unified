@@ -97,5 +97,5 @@ if [ ! -f "eula.txt" ]; then
     echo "eula=true" > eula.txt
 fi
 
-# Start the server
-./start.sh
+# Start the server inside a screen session
+exec screen -S minecraft ./start.sh
