@@ -15,7 +15,8 @@ To use this Docker image, you need to set a few environment variables to configu
 | `MC_VERSION`        | Specifies the version of Minecraft you want to run on the server.           | Any valid Minecraft version >= `1.17` (e.g., `1.20.1`, `1.19.4`)         | `latest-release`             | No       |
 | `JAVA_VERSION`      | Specifies the version of Java to use for running the Minecraft server.      | `17`, `21`                                                               | `auto` (based on MC_VERSION) | No       |
 | `MOD_LOADER`        | Specifies the mod loader to use for the server.                             | `vanilla`, `forge`, `fabric`, `neoforge`                                 | `vanilla`                    | No       |
-| `MOD_LOADER_VERSION`| Specifies the version of the mod loader to use.                             | Any valid version of the selected mod loader (e.g., `47.4.0`, `0.14.21`)| None                         | Yes (if using a mod loader other than `vanilla`) |
+| `MOD_LOADER_VERSION`| Specifies the version of the mod loader to use.                             | Any valid version of the selected mod loader (e.g., `47.4.0`, `0.14.21`) | None                         | Yes (if using a mod loader other than `vanilla`) |
+| `FABRIC_INSTALLER_VERSION`        | Specifies the version of the fabric installer                 | Any valid version of the fabric installer                                | None                         | Yes (if using fabric as a mod loader)      |
 | `JAVA_XMX`          | Specifies the maximum memory allocation for the JVM.                        | Any valid memory size (e.g., `2G`, `4G`)                                 | `2G`                         | No       |
 | `JAVA_XMS`          | Specifies the initial memory allocation for the JVM.                        | Any valid memory size (e.g., `2G`, `4G`)                                 | `2G`                         | No       |
 | `EULA`              | Specifies whether the use accepts [minecraft's eula agreement](https://account.mojang.com/documents/minecraft_eula)                        | Any valid memory size (e.g., `2G`, `4G`)                                 | `2G`                         | No       |
@@ -146,12 +147,6 @@ After attaching to the container, you can interact with the server console direc
 - **EULA**: To run the minecraft server you have to accept [Minecraft End(er)-User License Agreement (“EULA”)](https://account.mojang.com/documents/minecraft_eula) by setting the environment variable `-e EULA=true`. The container then creates an `eula.txt` file with `eula=true` in the server root folder.
 - **Data Persistence**: Mount a volume to `/server` to persist server data across container restarts.
 - **Logs**: Server logs are stored in the `/server` directory.  
-
-**Troubleshooting**
-- **Unsupported Java Version**: Ensure you set `JAVA_VERSION` to either `17` or `21`.
-- **Unsupported Mod Loader**: Ensure you set `MOD_LOADER` to one of the supported options (`vanilla`, `forge`, `fabric`, `neoforge`).
-- **Missing Environment Variables**: Make sure all required variables (`JAVA_VERSION`, `MC_VERSION`, `MOD_LOADER`, and `MOD_LOADER_VERSION` if applicable) are set.  
-- **Monitoring the installation process**: You can access the last 1000 lines in the logs of the container by running `docker logs --tail 1000 -f <container-id>`
 
 **License**
 This Docker image is provided under the **MIT License**. Minecraft is a trademark of Mojang AB, and this image is not affiliated with or endorsed by Mojang AB.
