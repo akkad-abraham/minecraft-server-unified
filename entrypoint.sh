@@ -20,6 +20,9 @@ if [[ -z "$JAVA_VERSION" ]]; then
     fi
 fi
 
+# Set default value for if AUTO_START to true
+AUTO_START=${AUTO_START:-true}
+
 # Set the Java version based on JAVA_VERSION environment variable
 case $JAVA_VERSION in
     17)
@@ -111,5 +114,8 @@ if [ ! -f "start.sh" ]; then
     fi
 fi
 
-# Start the server inside a screen session
-exec screen -S minecraft ./start.sh
+if [ "$AUTO_START" = "true" ]; then
+  exec screen -S minecraft ./start.sh
+else
+  echo "AUTO_START is not set to true. Server will not start automatically."
+fi

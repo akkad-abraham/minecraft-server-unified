@@ -19,7 +19,8 @@ To use this Docker image, you need to set a few environment variables to configu
 | `FABRIC_INSTALLER_VERSION`        | Specifies the version of the fabric installer                 | Any valid version of the fabric installer                                | None                         | Yes (if using fabric as a mod loader)      |
 | `JAVA_XMX`          | Specifies the maximum memory allocation for the JVM.                        | Any valid memory size (e.g., `2G`, `4G`)                                 | `2G`                         | No       |
 | `JAVA_XMS`          | Specifies the initial memory allocation for the JVM.                        | Any valid memory size (e.g., `2G`, `4G`)                                 | `2G`                         | No       |
-| `EULA`              | Specifies whether the use accepts [minecraft's eula agreement](https://account.mojang.com/documents/minecraft_eula)                        | Any valid memory size (e.g., `2G`, `4G`)                                 | `2G`                         | No       |
+| `EULA`              | Specifies whether the user accepts [minecraft's eula agreement](https://account.mojang.com/documents/minecraft_eula) | `true`, `false`                  | `false`                      | Yes       |
+| `AUTO_START`        | Specifies whether to start the server as soon as the container is started   | `true`, `false`                                                          | `true`                       | No       |
   
 ### Environment Variables
 
