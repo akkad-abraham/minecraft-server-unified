@@ -118,4 +118,6 @@ if [ "$AUTO_START" = "true" ]; then
   exec screen -S minecraft ./start.sh
 else
   echo "AUTO_START is not set to true. Server will not start automatically."
+  # keep the container alive for external tools to read logs
+  sleep 10
 fi
